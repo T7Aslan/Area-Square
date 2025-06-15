@@ -61,11 +61,53 @@ fn perimeter_to_area(shape: &impl Shape) -> f64 {
 
 fn main() {
     // Проверяем работу на примерах:
-    let triangle = Triangle { a: 3.0, b: 4.0, c: 5.0 };
-    let rectangle = Rectangle { width: 2.0, height: 3.0 };
+    let triangle = Triangle {
+        a: 3.0,
+        b: 4.0,
+        c: 5.0,
+    };
+    let rectangle = Rectangle {
+        width: 2.0,
+        height: 3.0,
+    };
     let circle = Circle { radius: 2.0 };
 
     println!("Triangle P/A: {}", perimeter_to_area(&triangle)); // Ожидается ~2.0
     println!("Rectangle P/A: {}", perimeter_to_area(&rectangle)); // Ожидается ~1.666...
     println!("Circle P/A: {}", perimeter_to_area(&circle)); // Ожидается 1.0
+}
+#[cfg(test)]
+mod tests {
+    // Создаём модуль тестов
+    use super::*;
+    use approx::relative_eq; // Импортируем макрос для сравнения чисел с плавающей точкой в карго добавили 
+    // Аннотация, что это тестовая функция
+    #[test]
+    fn test() {
+        #[cfg(test)]
+        mod tests {
+            use super::*;
+            use approx::relative_eq;
+
+            #[test]
+            fn test() {
+                relative_eq!(
+                    perimeter_to_area(&Triangle {
+                        a: 3.0,
+                        b: 4.0,
+                        c: 5.0
+                    }),
+                    2.0
+                );
+                relative_eq!(perimeter_to_area(&Circle { radius: 2.0 }), 1.0);
+                relative_eq!(
+                    perimeter_to_area(&Rectangle {
+                        width: 2.0,
+                        height: 3.0
+                    }),
+                    1.6666
+                );
+            }
+        }
+    }
 }
